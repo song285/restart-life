@@ -1,9 +1,4 @@
 # 重启人生 - 智能家居安全签到应用
-
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
-
 一款智能家居安全签到和紧急警报应用程序，旨在保障个人安全和日常健康监测。
 
 ## ✨ 功能特性
