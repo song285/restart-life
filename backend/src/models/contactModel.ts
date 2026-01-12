@@ -1,5 +1,5 @@
-import { db } from '../db/database';
-import { EmergencyContact } from '../types';
+import { db } from '../db/database.js';
+import { EmergencyContact } from '../types.js';
 
 const DEFAULT_USER_ID = 'default-user';
 

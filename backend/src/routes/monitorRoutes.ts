@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { checkInMonitor } from '../services/checkInMonitor';
+import { checkInMonitor } from '../services/checkInMonitor.js';
 
 const router = Router();
 

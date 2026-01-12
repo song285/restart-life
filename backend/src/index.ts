@@ -2,13 +2,13 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import cron from 'node-cron';
-import { initDatabase } from './db/database';
-import checkinRoutes from './routes/checkinRoutes';
-import settingsRoutes from './routes/settingsRoutes';
-import contactRoutes from './routes/contactRoutes';
-import greetingRoutes from './routes/greetingRoutes';
-import monitorRoutes from './routes/monitorRoutes';
-import { checkInMonitor } from './services/checkInMonitor';
+import { initDatabase } from './db/database.js';
+import checkinRoutes from './routes/checkinRoutes.js';
+import settingsRoutes from './routes/settingsRoutes.js';
+import contactRoutes from './routes/contactRoutes.js';
+import greetingRoutes from './routes/greetingRoutes.js';
+import monitorRoutes from './routes/monitorRoutes.js';
+import { checkInMonitor } from './services/checkInMonitor.js';
 
 dotenv.config();
 

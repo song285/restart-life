@@ -15,7 +15,7 @@ if (!fs.existsSync(dataDir)) {
   fs.mkdirSync(dataDir, { recursive: true });
 }
 
-export const db: Database = new DatabaseConstructor('sqlite.db');
+export const db: Database = new DatabaseConstructor(dbPath);
 
 // 启用外键约束
 db.pragma('foreign_keys = ON');

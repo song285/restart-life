@@ -1,5 +1,5 @@
-import { db } from '../db/database';
-import { UserSettings } from '../types';
+import { db } from '../db/database.js';
+import { UserSettings } from '../types.js';
 
 const DEFAULT_USER_ID = 'default-user';
 

@@ -1,5 +1,5 @@
-import { db } from '../db/database';
-import { CheckIn, CheckInStats } from '../types';
+import { db } from '../db/database.js';
+import { CheckIn, CheckInStats } from '../types.js';
 
 const DEFAULT_USER_ID = 'default-user';
 

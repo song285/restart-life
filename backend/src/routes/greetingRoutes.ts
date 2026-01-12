@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getDailyGreeting } from '../services/geminiService';
+import { getDailyGreeting } from '../services/geminiService.js';
 
 const router = Router();
 

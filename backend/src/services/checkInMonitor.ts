@@ -1,8 +1,8 @@
-import { checkinModel } from '../models/checkinModel';
-import { settingsModel } from '../models/settingsModel';
-import { contactModel } from '../models/contactModel';
-import { emailService } from './emailService';
-import { smsService } from './smsService';
+import { checkinModel } from '../models/checkinModel.js';
+import { settingsModel } from '../models/settingsModel.js';
+import { contactModel } from '../models/contactModel.js';
+import { emailService } from './emailService.js';
+import { smsService } from './smsService.js';
 
 const DEFAULT_USER_ID = 'default-user';
 
