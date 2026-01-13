@@ -1,11 +1,9 @@
 import { db } from '../db/database.js';
 import { UserSettings } from '../types.js';
 
-const DEFAULT_USER_ID = 'default-user';
-
 export const settingsModel = {
   // 获取用户设置
-  getByUserId(userId: string = DEFAULT_USER_ID): UserSettings | null {
+  getByUserId(userId: string): UserSettings | null {
     const stmt = db.prepare('SELECT * FROM user_settings WHERE user_id = ?');
     const result = stmt.get(userId) as any;
     if (!result) return null;

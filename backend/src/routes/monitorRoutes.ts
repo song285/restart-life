@@ -1,12 +1,13 @@
 import { Router } from 'express';
 import { checkInMonitor } from '../services/checkInMonitor.js';
+import { identifyUser } from '../middleware/userMiddleware.js';
 
 const router = Router();
 
 // 手动触发检查（用于测试）
-router.post('/check', async (req, res) => {
+router.post('/check', identifyUser, async (req, res) => {
   try {
-    const userId = req.body.userId || 'default-user';
+    const userId = req.userId!;
     await checkInMonitor.checkUserStatus(userId);
     res.json({ 
       success: true, 

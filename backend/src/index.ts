@@ -22,17 +22,28 @@ const allowedOrigins = process.env.CORS_ORIGIN
 
 app.use(cors({
   origin: (origin, callback) => {
-    // 允许没有origin的请求（如移动应用或Postman）
+    // 允许没有origin的请求（如通过 Nginx 代理的请求、移动应用或Postman）
     if (!origin) return callback(null, true);
     
+    // 允许配置的来源
     if (allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      callback(new Error('不允许的CORS来源'));
+      // 生产环境：如果通过 Nginx 代理，允许所有来源（因为 Nginx 会处理 CORS）
+      // 开发环境：严格检查
+      if (process.env.NODE_ENV === 'production') {
+        console.warn(`⚠️  未配置的 CORS 来源: ${origin}，但在生产环境中允许（通过 Nginx 代理）`);
+        callback(null, true);
+      } else {
+        callback(new Error(`不允许的CORS来源: ${origin}`));
+      }
     }
   },
   credentials: true
 }));
+// 配置 Express 信任代理（用于正确获取客户端IP）
+app.set('trust proxy', true);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

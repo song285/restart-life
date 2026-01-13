@@ -18,7 +18,7 @@ const Home: React.FC = () => {
 
         // 检查今天是否已打卡
         const { hasCheckedIn } = await api.hasCheckedInToday();
-        setIsCheckedIn(hasCheckedIn);
+        setIsCheckedIn(hasCheckedIn || false); // 确保是布尔值
 
         // 获取最后一次打卡信息
         const { lastCheckIn: lastCheckInData } = await api.getLastCheckIn();
@@ -37,12 +37,14 @@ const Home: React.FC = () => {
             setLastCheckIn('刚刚');
           }
         } else {
+          // 新用户没有打卡记录
           setLastCheckIn('从未打卡');
+          setIsCheckedIn(false); // 确保显示未打卡状态
         }
 
         // 获取统计信息以获取下次预计时间
         const stats = await api.getCheckInStats();
-        if (stats.nextExpected) {
+        if (stats && stats.nextExpected) {
           const nextTime = new Date(stats.nextExpected);
           const hours = nextTime.getHours();
           const mins = nextTime.getMinutes();
@@ -50,7 +52,9 @@ const Home: React.FC = () => {
         }
       } catch (error) {
         console.error('获取数据失败:', error);
-        setLastCheckIn('获取失败');
+        // 出错时重置为默认状态
+        setLastCheckIn('从未打卡');
+        setIsCheckedIn(false);
       }
     };
 

@@ -1,4 +1,5 @@
 // PM2 进程管理配置文件
+// 使用 .cjs 扩展名以支持 CommonJS 格式
 module.exports = {
   apps: [{
     name: 'restart-life-backend',

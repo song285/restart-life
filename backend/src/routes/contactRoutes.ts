@@ -1,12 +1,16 @@
 import { Router } from 'express';
 import { contactModel } from '../models/contactModel.js';
+import { identifyUser } from '../middleware/userMiddleware.js';
 
 const router = Router();
+
+// 所有路由都使用用户识别中间件
+router.use(identifyUser);
 
 // 获取所有联系人
 router.get('/', (req, res) => {
   try {
-    const userId = req.query.userId as string || 'default-user';
+    const userId = req.userId!;
     const contacts = contactModel.getByUserId(userId);
     res.json(contacts);
   } catch (error: any) {
@@ -18,7 +22,7 @@ router.get('/', (req, res) => {
 // 创建联系人
 router.post('/', (req, res) => {
   try {
-    const userId = req.body.userId || 'default-user';
+    const userId = req.userId!;
     
     // 检查是否超过限制
     if (!contactModel.canAddMore(userId)) {

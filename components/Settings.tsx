@@ -26,18 +26,35 @@ const Settings: React.FC = () => {
         const settingsData = await api.getSettings();
         if (settingsData) {
           setSettings({
-            emailNotify: settingsData.email_notify,
-            smsNotify: settingsData.sms_notify,
-            autoAlarm: settingsData.auto_alarm,
-            email: settingsData.email || 'user@example.com'
+            emailNotify: settingsData.email_notify ?? true,
+            smsNotify: settingsData.sms_notify ?? true,
+            autoAlarm: settingsData.auto_alarm ?? false,
+            email: settingsData.email || ''
+          });
+        } else {
+          // 如果没有设置，使用默认值
+          console.log('⚠️  未获取到设置数据，使用默认值');
+          setSettings({
+            emailNotify: true,
+            smsNotify: true,
+            autoAlarm: false,
+            email: ''
           });
         }
 
         // 获取联系人
         const contactsData = await api.getContacts();
-        setContacts(contactsData);
-      } catch (error) {
+        setContacts(contactsData || []);
+      } catch (error: any) {
         console.error('获取数据失败:', error);
+        // 出错时使用默认值
+        setSettings({
+          emailNotify: true,
+          smsNotify: true,
+          autoAlarm: false,
+          email: ''
+        });
+        setContacts([]);
       } finally {
         setLoading(false);
       }

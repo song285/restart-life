@@ -1,16 +1,29 @@
 import { Router } from 'express';
 import { settingsModel } from '../models/settingsModel.js';
+import { identifyUser } from '../middleware/userMiddleware.js';
 
 const router = Router();
+
+// 所有路由都使用用户识别中间件
+router.use(identifyUser);
 
 // 获取用户设置
 router.get('/', (req, res) => {
   try {
-    const userId = req.query.userId as string || 'default-user';
-    const settings = settingsModel.getByUserId(userId);
+    const userId = req.userId!;
+    let settings = settingsModel.getByUserId(userId);
+    
+    // 如果设置不存在，自动创建默认设置
     if (!settings) {
-      return res.status(404).json({ error: '设置不存在' });
+      console.log(`⚠️  用户 ${userId} 没有设置，自动创建默认设置`);
+      settings = settingsModel.update(userId, {
+        email_notify: true,
+        sms_notify: true,
+        auto_alarm: false,
+        email: ''
+      });
     }
+    
     res.json(settings);
   } catch (error: any) {
     console.error('获取设置错误:', error);
@@ -21,7 +34,7 @@ router.get('/', (req, res) => {
 // 更新用户设置
 router.put('/', (req, res) => {
   try {
-    const userId = req.body.userId || 'default-user';
+    const userId = req.userId!;
     const updates = {
       email_notify: req.body.email_notify,
       sms_notify: req.body.sms_notify,

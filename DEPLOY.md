@@ -114,7 +114,7 @@ npm run build
 
 # 5. 启动后端服务
 cd backend
-pm2 start ecosystem.config.js
+pm2 start ecosystem.config.cjs
 pm2 save
 ```
 
@@ -334,7 +334,7 @@ sudo systemctl reload nginx
 
 2. **PM2 集群模式**
    - 如果服务器性能足够，可以启用集群模式
-   - 修改 `ecosystem.config.js` 中的 `instances` 和 `exec_mode`
+   - 修改 `ecosystem.config.cjs` 中的 `instances` 和 `exec_mode`
 
 3. **数据库优化**
    - 定期清理旧数据

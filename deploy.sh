@@ -76,7 +76,7 @@ echo ""
 echo "🔧 启动后端服务..."
 cd backend
 pm2 delete restart-life-backend 2>/dev/null || true
-pm2 start ecosystem.config.js
+pm2 start ecosystem.config.cjs
 pm2 save
 cd ..
 

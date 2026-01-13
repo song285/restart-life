@@ -1,11 +1,9 @@
 import { db } from '../db/database.js';
 import { CheckIn, CheckInStats } from '../types.js';
 
-const DEFAULT_USER_ID = 'default-user';
-
 export const checkinModel = {
   // 创建打卡记录
-  create(userId: string = DEFAULT_USER_ID): CheckIn {
+  create(userId: string): CheckIn {
     const id = `checkin-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     const stmt = db.prepare(`
       INSERT INTO checkins (id, user_id, checkin_time)
@@ -22,7 +20,7 @@ export const checkinModel = {
   },
 
   // 获取用户的所有打卡记录
-  getByUserId(userId: string = DEFAULT_USER_ID, limit?: number): CheckIn[] {
+  getByUserId(userId: string, limit?: number): CheckIn[] {
     let query = 'SELECT * FROM checkins WHERE user_id = ? ORDER BY checkin_time DESC';
     if (limit) {
       query += ` LIMIT ${limit}`;
@@ -32,7 +30,7 @@ export const checkinModel = {
   },
 
   // 获取用户最后一次打卡
-  getLastCheckIn(userId: string = DEFAULT_USER_ID): CheckIn | null {
+  getLastCheckIn(userId: string): CheckIn | null {
     const stmt = db.prepare(`
       SELECT * FROM checkins 
       WHERE user_id = ? 
@@ -43,7 +41,7 @@ export const checkinModel = {
   },
 
   // 获取统计信息
-  getStats(userId: string = DEFAULT_USER_ID): CheckInStats {
+  getStats(userId: string): CheckInStats {
     // 获取本周的打卡数据
     const weekStart = new Date();
     weekStart.setDate(weekStart.getDate() - weekStart.getDay());
@@ -128,7 +126,7 @@ export const checkinModel = {
   },
 
   // 检查今天是否已打卡
-  hasCheckedInToday(userId: string = DEFAULT_USER_ID): boolean {
+  hasCheckedInToday(userId: string): boolean {
     const stmt = db.prepare(`
       SELECT COUNT(*) as count
       FROM checkins

@@ -1,10 +1,9 @@
 import { checkinModel } from '../models/checkinModel.js';
 import { settingsModel } from '../models/settingsModel.js';
 import { contactModel } from '../models/contactModel.js';
+import { userModel } from '../models/userModel.js';
 import { emailService } from './emailService.js';
 import { smsService } from './smsService.js';
-
-const DEFAULT_USER_ID = 'default-user';
 
 // 记录已发送的提醒，避免重复发送
 const sentReminders = new Map<string, {
@@ -14,7 +13,7 @@ const sentReminders = new Map<string, {
 
 export const checkInMonitor = {
   // 检查用户打卡状态并发送相应提醒
-  async checkUserStatus(userId: string = DEFAULT_USER_ID): Promise<void> {
+  async checkUserStatus(userId: string): Promise<void> {
     try {
       // 获取用户设置
       const settings = settingsModel.getByUserId(userId);
@@ -137,8 +136,19 @@ export const checkInMonitor = {
   // 检查所有用户的状态
   async checkAllUsers(): Promise<void> {
     try {
-      // 目前只有一个默认用户，后续可以扩展为检查所有用户
-      await this.checkUserStatus(DEFAULT_USER_ID);
+      // 获取所有用户
+      const users = userModel.getAll();
+      console.log(`🔍 开始检查 ${users.length} 个用户的打卡状态...`);
+      
+      // 并行检查所有用户
+      const checkPromises = users.map(user => 
+        this.checkUserStatus(user.id).catch(error => {
+          console.error(`检查用户 ${user.id} 时出错:`, error);
+        })
+      );
+      
+      await Promise.all(checkPromises);
+      console.log(`✅ 完成检查 ${users.length} 个用户`);
     } catch (error) {
       console.error('检查所有用户状态时出错:', error);
     }

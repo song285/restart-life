@@ -1,12 +1,16 @@
 import { Router } from 'express';
 import { checkinModel } from '../models/checkinModel.js';
+import { identifyUser } from '../middleware/userMiddleware.js';
 
 const router = Router();
+
+// 所有路由都使用用户识别中间件
+router.use(identifyUser);
 
 // 创建打卡记录
 router.post('/', (req, res) => {
   try {
-    const userId = req.body.userId || 'default-user';
+    const userId = req.userId!;
     
     // 检查今天是否已打卡
     if (checkinModel.hasCheckedInToday(userId)) {
@@ -27,7 +31,7 @@ router.post('/', (req, res) => {
 // 获取打卡统计
 router.get('/stats', (req, res) => {
   try {
-    const userId = req.query.userId as string || 'default-user';
+    const userId = req.userId!;
     const stats = checkinModel.getStats(userId);
     res.json(stats);
   } catch (error: any) {
@@ -39,7 +43,7 @@ router.get('/stats', (req, res) => {
 // 获取最后一次打卡
 router.get('/last', (req, res) => {
   try {
-    const userId = req.query.userId as string || 'default-user';
+    const userId = req.userId!;
     const lastCheckIn = checkinModel.getLastCheckIn(userId);
     res.json({ lastCheckIn });
   } catch (error: any) {
@@ -51,7 +55,7 @@ router.get('/last', (req, res) => {
 // 检查今天是否已打卡
 router.get('/today', (req, res) => {
   try {
-    const userId = req.query.userId as string || 'default-user';
+    const userId = req.userId!;
     const hasCheckedIn = checkinModel.hasCheckedInToday(userId);
     res.json({ hasCheckedIn });
   } catch (error: any) {

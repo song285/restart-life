@@ -1,11 +1,9 @@
 import { db } from '../db/database.js';
 import { EmergencyContact } from '../types.js';
 
-const DEFAULT_USER_ID = 'default-user';
-
 export const contactModel = {
   // 获取用户的所有联系人
-  getByUserId(userId: string = DEFAULT_USER_ID): EmergencyContact[] {
+  getByUserId(userId: string): EmergencyContact[] {
     const stmt = db.prepare('SELECT * FROM emergency_contacts WHERE user_id = ? ORDER BY created_at DESC');
     return stmt.all(userId) as EmergencyContact[];
   },
@@ -68,7 +66,7 @@ export const contactModel = {
   },
 
   // 检查联系人数量限制（最多5个）
-  canAddMore(userId: string = DEFAULT_USER_ID): boolean {
+  canAddMore(userId: string): boolean {
     const count = this.getByUserId(userId).length;
     return count < 5;
   }
